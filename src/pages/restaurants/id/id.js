@@ -3,8 +3,8 @@ import { centsToDollars } from "@/utils/centsToDollars";
 import { useRouter } from "next/router";
 
 import Image from "next/image";
-import Loader from "../../components/Loader";
-// import Loader from "@/components/Loader";
+//import Loader from "../../components/Loader";
+import Loader from "@/components/Loader";
 
 const GET_RESTAURANT_DISHES = gql`
   query ($id: ID!) {
