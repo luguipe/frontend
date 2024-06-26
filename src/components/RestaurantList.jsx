@@ -49,7 +49,7 @@ function RestaurantCard({ data }) {
             <div className="w-full md:w-auto p-2 my-6">
               <Link
                 className="block w-full px-12 py-3.5 text-lg text-center text-white font-bold bg-gray-900 hover:bg-gray-800 focus:ring-4 focus:ring-gray-600 rounded-full"
-                href={`/restaurant/${data.ID}`}
+                href={`/restaurants/${data.id}`}
               >
                 View
               </Link>

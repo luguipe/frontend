@@ -1,37 +1,66 @@
 import { gql, useQuery } from "@apollo/client";
-import { centsToDollars } from "@/utils/centsToDollars";
+
 import { useRouter } from "next/router";
 
 import Image from "next/image";
-//import Loader from "../../components/Loader";
+// import Loader from "../../components/Loader";
 import Loader from "@/components/Loader";
+import { centsToDollars } from "@/utils/centsToDollars";
 
 const GET_RESTAURANT_DISHES = gql`
+# query Restaurants {
+#             restaurants {
+#                 data {
+#                     id
+#                     attributes {
+#                         name
+#                         description
+#                         createdAt
+#                         updatedAt
+#                         publishedAt
+#                         dishes {
+#                             data {
+#                                 id
+#                                 attributes {
+#                                     name
+#                                     description
+#                                     price
+#                                     createdAt
+#                                     updatedAt
+#                                     publishedAt
+#                                 }
+#                             }
+#                         }
+#                     }
+#                 }
+#             }
+#         }
   query ($id: ID!) {
     restaurant(id: $id) {
-      data {
-        id
-        attributes {
-          name
-          dishes {
-            data {
-              id
-              attributes {
+    data {
+            id
+            attributes {
                 name
                 description
-                priceInCents
-                image {
-                  data {
-                    attributes {
-                      url
+                dishes {
+                    data {
+                        id
+                        attributes {
+                            name
+                            description
+                            price
+                            image {
+                                data {
+                                    attributes {
+                                    url
+                                    }
+                                }
+                            }
+                        }
                     }
-                  }
                 }
-              }
             }
-          }
         }
-      }
     }
   }
 `;
@@ -42,14 +71,22 @@ function DishCard({ data }) {
     }
 
     return (
+
+        // console.log("*****data.attributes.image.data.attributes.url****"),
+        // console.log(data.attributes),
+        console.log("----------data---------"),
+        console.log(data),
+        console.log("Price in cents:", data.attributes.price),
+        console.log("Converted price:", centsToDollars(data.attributes.price)),
+
+
         <div className="w-full md:w-1/2 lg:w-1/3 p-4">
             <div className="h-full bg-gray-100 rounded-2xl">
                 <Image
                     className="w-full rounded-2xl"
                     height={300}
                     width={300}
-                    src={`${process.env.STRAPI_URL || "http://127.0.0.1:1337"}${data.attributes.image.data.attributes.url
-                        }`}
+                    src={`${process.env.STRAPI_URL || "http://127.0.0.1:1337"}${data.attributes.image.data[0].attributes.url}`}
                     alt=""
                 />
                 <div className="p-8">
@@ -57,7 +94,7 @@ function DishCard({ data }) {
                         <h3 className="font-heading text-xl text-gray-900 hover:text-gray-700 group-hover:underline font-black">
                             {data.attributes.name}
                         </h3>
-                        <h2>${centsToDollars(data.attributes.priceInCents)}</h2>
+                        <h2>${centsToDollars(data.attributes.price)}</h2>
                     </div>
                     <p className="text-sm text-gray-500 font-bold">
                         {data.attributes.description}
